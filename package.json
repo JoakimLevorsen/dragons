@@ -4,5 +4,9 @@
   "workspaces": [
     "backend",
     "frontend"
-  ]
+  ],
+  "devDependencies": {
+    "@yarnpkg/pnpify": "^4.0.1",
+    "typescript": "^5.4.5"
+  }
 }
