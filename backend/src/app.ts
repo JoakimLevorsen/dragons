@@ -73,6 +73,66 @@ app.put("/dragon", (req, res) => {
   return res.send(db.createDragon(user, params.data.name).toFrontend());
 });
 
+// Battles
+
+const putBattleSchema = z.object({
+  userId: idSchema,
+  dragons: z.tuple([idSchema, idSchema]),
+});
+
+app.put("/battle", (req, res) => {
+  const params = putBattleSchema.safeParse(req.body);
+
+  if (params.error) {
+    res.status(401).send(params.error);
+    return;
+  }
+
+  const user = db.getUser(params.data.userId);
+
+  if (!user) {
+    res.status(404).send("User not found");
+    return;
+  }
+
+  const battle = db.createBattle(user, params.data.dragons);
+
+  if (typeof battle === "string") {
+    res.status(400).send(battle);
+  } else {
+    res.send(battle.toFrontend());
+  }
+});
+
+app.get("/battle/:first/:second", (req, res) => {
+  const first = idSchema.parse(+req.params.first);
+  const second = idSchema.parse(+req.params.second);
+
+  const battle = db.getBattle(first, second);
+
+  if (battle) {
+    res.send(battle.toFrontend());
+  } else {
+    res.status(404).send("Battle not found");
+  }
+});
+
+app.patch("/battle/:first/:second/takeTurn", (req, res) => {
+  const first = idSchema.parse(+req.params.first);
+  const second = idSchema.parse(+req.params.second);
+
+  const battle = db.getBattle(first, second);
+
+  if (!battle) {
+    res.status(404).send("Battle not found");
+    return;
+  }
+
+  battle.iterate();
+
+  return battle.toFrontend();
+});
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
