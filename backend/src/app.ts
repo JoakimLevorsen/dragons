@@ -56,8 +56,6 @@ const putDragonSchema = z.object({
 });
 
 app.put("/dragon", (req, res) => {
-  console.log("Raw is", req.body);
-
   const params = putDragonSchema.safeParse(req.body);
 
   if (params.error) {
