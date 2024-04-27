@@ -22,7 +22,7 @@ app.put("/user", (req, res) => {
     db.createDragon(user, name);
   }
 
-  res.send();
+  res.send(user.toFrontend());
 });
 
 const idSchema = z.number().min(0, "Negative ID's should not exist");
