@@ -80,7 +80,7 @@ const putBattleSchema = z.object({
   dragons: z.tuple([idSchema, idSchema]),
 });
 
-app.put("/battle", (req, res) => {
+app.post("/battle", (req, res) => {
   const params = putBattleSchema.safeParse(req.body);
 
   if (params.error) {
@@ -123,6 +123,8 @@ app.patch("/battle/:first/:second/takeTurn", (req, res) => {
 
   const battle = db.getBattle(first, second);
 
+  console.log("Running resolver");
+
   if (!battle) {
     res.status(404).send("Battle not found");
     return;
@@ -130,7 +132,14 @@ app.patch("/battle/:first/:second/takeTurn", (req, res) => {
 
   battle.iterate();
 
+  console.log("Returning", battle);
+
   return battle.toFrontend();
+});
+
+app.use((req, res, next) => {
+  console.log(`Received ${req.method} request to ${req.path}`);
+  next();
 });
 
 app.listen(port, () => {

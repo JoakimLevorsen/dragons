@@ -1,10 +1,14 @@
 import React, { useCallback, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import type { FrontendUser } from "../../backend/src/db";
+import type {
+  FrontendUser,
+  FrontendDragon,
+  FrontendBattle,
+} from "../../backend/src/db";
 import { DragonOverview } from "./pages/DragonOverview";
 
-export { FrontendUser };
+export { FrontendUser, FrontendDragon, FrontendBattle };
 
 function App() {
   const [user, setUser] = useState<FrontendUser | null>(null);

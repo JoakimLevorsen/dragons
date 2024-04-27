@@ -23,7 +23,7 @@ export class DB {
     dragonIds: [number, number]
   ): Battle | string {
     const first = owner.dragons.find((dragon) => dragon.id === dragonIds[0]);
-    const second = owner.dragons.find((dragon) => dragon.id === dragonIds[0]);
+    const second = owner.dragons.find((dragon) => dragon.id === dragonIds[1]);
     if (!first) {
       return `Failed to find dragon with id ${dragonIds[0]}`;
     }
@@ -33,10 +33,13 @@ export class DB {
     if (first.id === second.id) {
       return "Cannot battle dragon with itself";
     }
-    return new Battle([first, second]);
+    const battle = new Battle([first, second]);
+    this.battles.push(battle);
+    return battle;
   }
 
   public getBattle(first: number, second: number) {
+    console.log(`Looking for (${first}, ${second}) in `, this.battles);
     return this.battles.find(
       (battle) =>
         (battle.dragonsIds[0] === first && battle.dragonsIds[1] === second) ||
