@@ -34,7 +34,9 @@ export const DragonOverview: React.FC<Props> = ({ user, updateUser }) => {
       <div>
         <h2>Dragons</h2>
         {user.dragons.map((dragon) => (
-          <p key={dragon.id}>{dragon.name}</p>
+          <p key={dragon.id}>
+            {dragon.name}, Strength {dragon.strength}
+          </p>
         ))}
       </div>
     </div>
