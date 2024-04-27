@@ -1,19 +1,26 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import type { User } from "../../backend/src/db";
-import { BattlePage } from "./pages/BattlePage";
+import type { FrontendUser } from "../../backend/src/db";
+import { DragonOverview } from "./pages/DragonOverview";
 
-export { User };
+export { FrontendUser };
 
 function App() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<FrontendUser | null>(null);
+
+  const updateUser = useCallback(async () => {
+    if (!user) return;
+    setUser(
+      await (await fetch(`http://localhost:4000/user/${user.id}`)).json()
+    );
+  }, [user, setUser]);
 
   return (
     <div className="App">
       <header className="App-header">
         {user ? (
-          <BattlePage user={user} />
+          <DragonOverview user={user} updateUser={updateUser} />
         ) : (
           <button
             onClick={async () => {
